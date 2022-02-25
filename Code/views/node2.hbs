@@ -1,0 +1,122 @@
+<html>
+	<head>
+		<title>
+			IMDb Distributed Database
+		</title>
+
+		<link href='../css/style.css' rel='stylesheet' type='text/css' />
+		<link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Open Sans' />
+		<link
+			rel='stylesheet'
+			href='https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css'
+		/>
+		<link
+			rel='stylesheet'
+			type='text/css'
+			href='https://cdn.datatables.net/1.11.4/css/jquery.dataTables.css'
+		/>
+
+		<script src='https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js'></script>
+		<script src='https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js'></script>
+		<script
+			type='text/javascript'
+			charset='utf8'
+			src='https://cdn.datatables.net/1.11.4/js/jquery.dataTables.js'
+		></script>
+
+		<script src='../js/home.js'></script>
+	</head>
+
+	<body>
+		<div class='box'>
+			<table id='header'>
+				<tr>
+					<td>
+						<img src='../img/reel.png' style='width: 150px;' />
+					</td>
+					<td style='text-align: center;'>
+						<h1>
+							IMDb Node 2
+							<span style='font-size: 16px; margin-left: 8px;'>
+								Movies before 1980
+							</span>
+						</h1>
+						<p style='font-weight: bold;'>
+							Lander Peter E. Cua, Jacob Bryan B. Gaba, Mark Edward M. Gonzales,
+							Hylene Jules G. Lee
+						</p>
+						<p>
+							STADVDB Major Course Output 2, De La Salle University
+						</p>
+					</td>
+					<td>
+						<img src='../img/IMDB_Logo_2016.svg' style='width: 150px;' />
+					</td>
+				</tr>
+			</table>
+		</div>
+
+		<div class='results-div'>
+			<table class='results-table'>
+				<thead>
+					<tr>
+						<th>
+							ID
+						</th>
+						<th>
+							Title
+						</th>
+						<th>
+							Year
+						</th>
+						<th>
+							Genre
+						</th>
+						<th>
+							Rank
+						</th>
+						<th>
+							Director
+						</th>
+						<th>
+							Actor 1
+						</th>
+						<th>
+							Actor 2
+						</th>
+					</tr>
+				</thead>
+				<tbody>
+					{{#each result}}
+						<tr>
+							<td>
+								{{this.id}}
+							</td>
+							<td>
+								{{this.name}}
+							</td>
+							<td>
+								{{this.year}}
+							</td>
+							<td>
+								{{this.genre}}
+							</td>
+							<td>
+								{{this.rank}}
+							</td>
+							<td>
+								{{this.director}}
+							</td>
+							<td>
+								{{this.actor1}}
+							</td>
+							<td>
+								{{this.actor2}}
+							</td>
+						</tr>
+					{{/each}}
+				</tbody>
+			</table>
+		</div>
+	</body>
+</html>

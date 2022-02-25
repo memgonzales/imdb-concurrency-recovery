@@ -1,0 +1,736 @@
+<html>
+	<head>
+		<title>
+			IMDb Distributed Database
+		</title>
+
+		<link href='../css/style.css' rel='stylesheet' type='text/css' />
+		<link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Open Sans' />
+		<link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css' />
+		<link rel='stylesheet' type='text/css' href='https://cdn.datatables.net/1.11.4/css/jquery.dataTables.css' />
+
+		<script src='https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js'></script>
+		<script src='https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js'></script>
+		<script type='text/javascript' charset='utf8' src='https://cdn.datatables.net/1.11.4/js/jquery.dataTables.js'></script>
+
+		<script src='../js/home.js'></script>
+	</head>
+
+	<body>
+		<div class='box'>
+			<table id='header'>
+				<tr>
+					<td>
+						<img src='../img/reel.png' style='width: 150px;' />
+					</td>
+					<td style='text-align: center;'>
+						<h1>
+							IMDb Distributed Database
+						</h1>
+						<p style='font-weight: bold;'>
+							Lander Peter E. Cua, Jacob Bryan B. Gaba, Mark Edward M. Gonzales, Hylene Jules G. Lee
+						</p>
+						<p>
+							STADVDB Major Course Output 2, De La Salle University
+						</p>
+					</td>
+					<td>
+						<img src='../img/IMDB_Logo_2016.svg' style='width: 150px;' />
+					</td>
+				</tr>
+			</table>
+		</div>
+
+		<div class='results-div'>
+			<table id='results-table' class='results-table'>
+				<thead>
+					<tr>
+						<th>
+							ID
+						</th>
+						<th>
+							Title
+						</th>
+						<th>
+							Year
+						</th>
+						<th>
+							Genre
+						</th>
+						<th>
+							Rank
+						</th>
+						<th>
+							Director
+						</th>
+						<th>
+							Actor 1
+						</th>
+						<th>
+							Actor 2
+						</th>
+					</tr>
+				</thead>
+				<tbody>
+					{{#each resultObj.allData}}
+						<tr>
+							<td>
+								{{this.id}}
+							</td>
+							<td>
+								{{this.name}}
+							</td>
+							<td>
+								{{this.year}}
+							</td>
+							<td>
+								{{this.genre}}
+							</td>
+							<td>
+								{{this.rank}}
+							</td>
+							<td>
+								{{this.director}}
+							</td>
+							<td>
+								{{this.actor1}}
+							</td>
+							<td>
+								{{this.actor2}}
+							</td>
+						</tr>
+					{{/each}}
+				</tbody>
+			</table>
+
+			<div style='text-align: center; padding-top: 0px; font-style: italic;'>
+				<h5 style='margin-left: auto; margin-right: auto;' id='result-status'>
+				</h5>
+			</div>
+		</div>
+
+		<div id='methods-container' class='shaded container-fluid'>
+			<div class='row'>
+				<div class='col-sm-3 form-group methods'>
+					<div class='form-group'>
+						<h2>
+							Search
+						</h2>
+
+						<br />
+
+						<form id='search-form'>
+							<label for='searchCriteria'>
+								ID, Title, Genre, Director, or Actor
+							</label>
+
+							<input type='text' class='form-control' id='search-criteria' name='searchCriteria' placeholder='Leave blank to display all entries' required />
+							<input type='hidden' id='search-form-isolation-level' name='isolationLevel' />
+
+							<br />
+
+							<input id='search-btn' type='submit' class='btn btn-info' value='Display Partial Results' />
+
+							<br />
+
+							<input id='display-all' type='submit' class='btn btn-info' value='Display All (May be slow)' />
+						</form>
+					</div>
+
+					<div style='margin-bottom: -50px;'></div>
+
+					<div class='form-group'>
+						<h2>
+							Delete
+						</h2>
+
+						<br />
+
+						<form id='deleteEntryForm'>
+							<label for='id'>
+								ID
+							</label>
+
+							<input type='number' class='form-control' id='id' name='id' placeholder='Movie ID' required />
+							<input type='hidden' id='delete-entry-form-isolation-level' name='isolationLevel' />
+							<br />
+
+							<input type='submit' id='delete-btn' class='btn btn-info' value='Delete' />
+						</form>
+					</div>
+				</div>
+
+				<div class='col-sm-4 form-group methods'>
+					<div class='form-group'>
+						<h2>
+							Insert
+						</h2>
+
+						<form id='add-entry-form'>
+							<div class='container-fluid' style='padding: 0px;'>
+								<div class='row' style='padding: 0px;'>
+									<div class='col-sm-6'>
+										<label for='title'>
+											Title
+										</label>
+
+										<input type='text' class='form-control' id='title' name='title' placeholder='Title of the movie' required />
+										<br />
+
+										<label for='year'>
+											Year
+										</label>
+
+										<input type='number' class='form-control' id='year' name='year' placeholder='Year of release' required />
+										<br />
+
+										<label for='genre'>
+											Genre
+										</label>
+
+										<input type='text' class='form-control' id='genre' name='genre' placeholder='Comedy, drama, etc.' required />
+										<br />
+
+										<label for='rank'>
+											Rank
+										</label>
+
+										<input type='number' class='form-control' id='rank' name='rank' step='0.01' min='0' max='10' placeholder='Movie rating' required />
+									</div>
+
+									<div class='col-sm-6'>
+										<label for='director'>
+											Director
+										</label>
+
+										<input type='text' class='form-control' id='director' name='director' placeholder='Lead director' required />
+										<br />
+
+										<label for='actor1'>
+											Actor 1
+										</label>
+
+										<input type='text' class='form-control' id='actor1' name='actor1' placeholder='Lead actor' required />
+										<br />
+
+										<label for='actor2'>
+											Actor 2
+										</label>
+
+										<input type='text' class='form-control' id='actor2' name='actor2' placeholder='Supporting actor' required />
+									</div>
+								</div>
+							</div>
+							<input type='submit' id='add-entry-btn' class='btn btn-info' value='Insert' />
+						</form>
+					</div>
+				</div>
+
+				<div class='col-sm-5 form-group methods'>
+					<div class='form-group'>
+						<h2>
+							Update
+						</h2>
+
+						<form id='update-entry-form'>
+							<div class='container-fluid' style='padding: 0px;'>
+								<div class='row' style='padding: 0px;'>
+									<div class='col-sm-6'>
+										<input type='hidden' id='update-entry-form-isolation-level' name='isolationLevel' />
+										<label for='id'>
+											ID
+										</label>
+
+										<input type='number' class='form-control' id='id' name='id' placeholder='Basis for selecting entry' required />
+										<br />
+
+										<label for='id'>
+											Title
+										</label>
+
+										<input type='text' class='form-control' id='title' name='title' placeholder='Title of the movie' required />
+										<br />
+
+										<label for='genre'>
+											Genre
+										</label>
+
+										<input type='text' class='form-control' id='genre' name='genre' placeholder='Comedy, drama, etc.' required />
+										<br />
+
+										<label for='rank'>
+											Rank
+										</label>
+
+										<input type='number' class='form-control' id='rank' name='rank' step='0.01' min='0' max='10' placeholder='Movie rating' required />
+									</div>
+
+									<div class='col-sm-6'>
+										<label for='director'>
+											Director
+										</label>
+
+										<input type='text' class='form-control' id='director' name='director' placeholder='Lead director' required />
+										<br />
+
+										<label for='actor1'>
+											Actor 1
+										</label>
+
+										<input type='text' class='form-control' id='actor1' name='actor1' placeholder='Lead actor' required />
+										<br />
+
+										<label for='actor2'>
+											Actor 2
+										</label>
+
+										<input type='text' class='form-control' id='actor2' name='actor2' placeholder='Supporting actor' required />
+									</div>
+								</div>
+							</div>
+							<input id='update-btn' type='submit' class='btn btn-info' value='Update' />
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- -->
+		<div id='generated-reports'>
+			<div class='row'>
+				<div class='col-sm-12 methods'>
+					<p class='report-title'>
+						Number of Movies per Genre
+					</p>
+					<table id='results-table-1' class='results-table'>
+						<thead>
+							<tr>
+								<th>
+									Genre
+								</th>
+								<th>
+									Movie Count
+								</th>
+							</tr>
+						</thead>
+						<tbody>
+							{{#each resultObj.report1}}
+								<tr>
+									<td>
+										{{this.genre}}
+									</td>
+									<td>
+										{{this.num_movies}}
+									</td>
+								</tr>
+							{{/each}}
+						</tbody>
+					</table>
+					<p class='report-title'>
+						Directors with Top 10 Average Ranks per Genre
+					</p>
+					<table id='results-table-2' class='results-table'>
+						<thead>
+							<tr>
+								<th>
+									Genre
+								</th>
+								<th>
+									Director
+								</th>
+								<th>
+									Average Rank
+								</th>
+							</tr>
+						</thead>
+						<tbody>
+							{{#each resultObj.report2}}
+								<tr>
+									<td>
+										{{this.genre}}
+									</td>
+									<td>
+										{{this.director}}
+									</td>
+									<td>
+										{{this.ave_rank}}
+									</td>
+								</tr>
+							{{/each}}
+						</tbody>
+					</table>
+					<p class='report-title'>
+						Leading Actor With Most Roles per Year
+					</p>
+					<table id='results-table-3' class='results-table'>
+						<thead>
+							<tr>
+								<th>
+									Year
+								</th>
+								<th>
+									Actor
+								</th>
+								<th>
+									Role Count
+								</th>
+							</tr>
+						</thead>
+						<tbody>
+							{{#each resultObj.report3}}
+								<tr>
+									<td>
+										{{this.year}}
+									</td>
+									<td>
+										{{this.actor}}
+									</td>
+									<td>
+										{{this.Num_roles}}
+									</td>
+								</tr>
+							{{/each}}
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+
+		<div class='container-fluid' id='demo-btn-div'>
+			<div class='row'>
+				<div class='col-sm-3 methods'>
+					<button id='demo-btn' type='button' class='btn btn-info'>
+						For Demo & Experiments Only
+					</button>
+				</div>
+			</div>
+		</div>
+
+		<div id='access-nodes' class='container-fluid' style='padding-top: 0px; padding-bottom: 0px;'>
+			<div class='row'>
+				<div class='col-sm-12 methods'>
+					<table class='table'>
+						<tr>
+							<th>
+								Node
+							</th>
+							<th>
+								Description
+							</th>
+						</tr>
+
+						<tr>
+							<td>
+								<a href='/getCentralNode' target='_blank'>
+									Central Node
+								</a>
+							</td>
+							<td>
+								All movies (No LIMIT in SQL query -- may be slow.)
+							</td>
+						</tr>
+
+						<tr>
+							<td>
+								<a href='/getNode2' target='_blank'>
+									Node 2
+								</a>
+							</td>
+							<td>
+								Movies before 1980 (No LIMIT in SQL query -- may be slow.)
+							</td>
+						</tr>
+
+						<tr>
+							<td>
+								<a href='/getNode3' target='_blank'>
+									Node 3
+								</a>
+							</td>
+							<td>
+								Movies from 1980 onwards (No LIMIT in SQL query -- may be slow.)
+							</td>
+						</tr>
+					</table>
+				</div>
+			</div>
+		</div>
+
+		<div id='test-container' class='shaded container-fluid'>
+			<div class='row'>
+				<div class='col-sm-3 form-group methods' style='padding-top: 20px;'>
+					<label for='isolation-level'>
+					</label>
+					<select class='form-control' id='isolation-level'>
+						<option value='READ UNCOMMITTED'>
+							Read Uncommitted
+						</option>
+						<option value='READ COMMITTED'>
+							Read Committed
+						</option>
+						<option value='REPEATABLE READ' selected>
+							Repeatable Read
+						</option>
+						<option value='SERIALIZABLE'>
+							Serializable
+						</option>
+					</select>
+				</div>
+			</div>
+			<div class='row'>
+				<div class='col-sm-3 form-group methods' style='padding-top: 0px;'>
+					<div class='form-group'>
+						<h3>
+							Search
+						</h3>
+
+						<br />
+
+						<form id='failure-select-form'>
+							<label for='searchCriteria'>
+								ID, Title, Genre, Director, or Actor
+							</label>
+
+							<input type='text' class='form-control' id='searchCriteria' name='searchCriteria' placeholder='Leave blank to display all entries' required />
+
+							<br />
+
+							<a href='/case3Select'>
+								<input id='case3Select-btn' type='submit' class='btn btn-info' value='Case 3 (Central Node Unavailable)' />
+							</a>
+							<br />
+							<br />
+							<a href='/case4Select'>
+								<input id='case4Select-btn' type='submit' class='btn btn-info' value='Case 4a (Node 2 Unavailable)' />
+							</a>
+							<br />
+							<br />
+							<a href='/case4Select2'>
+								<input id='case4Select-btn2' type='submit' class='btn btn-info' value='Case 4b (Node 3 Unavailable)' />
+							</a>
+							<br />
+							<br />
+							<a href='/extraSelect1'>
+								<input id='extraSelect-btn1' type='submit' class='btn btn-info' value='Extra (Central Node + Node 2 Unavailable)' />
+							</a>
+							<br />
+							<br />
+							<a href='/extraSelect2'>
+								<input id='extraSelect-btn2' type='submit' class='btn btn-info' value='Extra (Central Node + Node 3 Unavailable)' />
+							</a>
+							<br />
+							<br />
+							<a href='/extraSelect3'>
+								<input id='extraSelect-btn3' type='submit' class='btn btn-info' value='Extra (Node 2 + Node 3 Unavailable)' />
+							</a>
+
+							<br />
+						</form>
+					</div>
+
+					<br />
+
+					<div style='margin-bottom: -25px;'></div>
+
+					<div class='form-group'>
+						<h3>
+							Delete
+						</h3>
+
+						<br />
+
+						<form id='failure-delete-form' action='/deleteEntry'>
+							<label for='id'>
+								ID
+							</label>
+							<input type='number' class='form-control' id='id' name='id' placeholder='Movie ID' required />
+							<br />
+							<input id='delete-case1' type='submit' class='btn btn-info red-btn' value='Case 1 (Failure Replicating to Central Node from Node 2/3)' />
+							<br />
+							<br />
+							<input id='delete-case2a' type='submit' class='btn btn-info red-btn' value='Case 2a (Failure Replicating to Node 2 from Central Node)' />
+							<br />
+							<br />
+							<input id='delete-case2b' type='submit' class='btn btn-info red-btn' value='Case 2b (Failure Replicating to Node 3 from Central Node)' />
+							<br />
+							<br />
+							<input id='delete-case3' type='submit' class='btn btn-info red-btn' value='Case 3 (Central Node Unavailable)' />
+							<br />
+							<br />
+							<input id='delete-case4a' type='submit' class='btn btn-info red-btn' value='Case 4a (Node 2 Unavailable)' />
+							<br />
+							<br />
+							<input id='delete-case4b' type='submit' class='btn btn-info red-btn' value='Case 4b (Node 3 Unavailable)' />
+						</form>
+					</div>
+				</div>
+
+				<div class='col-sm-4 form-group methods'>
+					<div class='form-group'>
+						<h3>
+							Insert
+						</h3>
+
+						<form id='failure-insert-form' method='post' action='/addEntry'>
+							<div class='container-fluid' style='padding: 0px;'>
+								<div class='row' style='padding: 0px;'>
+									<div class='col-sm-6'>
+										<label for='title'>
+											Title
+										</label>
+
+										<input type='text' class='form-control' id='title' name='title' placeholder='Title of the movie' required />
+										<br />
+
+										<label for='year'>
+											Year
+										</label>
+
+										<input type='number' class='form-control' id='year' name='year' placeholder='Year of release' required />
+										<br />
+
+										<label for='genre'>
+											Genre
+										</label>
+
+										<input type='text' class='form-control' id='genre' name='genre' placeholder='Comedy, drama, etc.' />
+										<br />
+
+										<label for='rank'>
+											Rank
+										</label>
+
+										<input type='number' class='form-control' id='rank' name='rank' step='0.01' min='0' max='10' placeholder='Movie rating' />
+									</div>
+
+									<div class='col-sm-6'>
+										<label for='director'>
+											Director
+										</label>
+
+										<input type='text' class='form-control' id='director' name='director' placeholder='Lead director' />
+										<br />
+
+										<label for='actor1'>
+											Actor 1
+										</label>
+
+										<input type='text' class='form-control' id='actor1' name='actor1' placeholder='Lead actor' />
+										<br />
+
+										<label for='actor2'>
+											Actor 2
+										</label>
+
+										<input type='text' class='form-control' id='actor2' name='actor2' placeholder='Supporting actor' />
+									</div>
+								</div>
+							</div>
+							<input id='insert-btn-1a' type='submit' class='btn btn-info' value='Case 1 (Failure Replicating to Central Node from Node 2 or Node 3)' />
+							<br />
+							<br />
+							<input id='insert-btn-2a' type='submit' class='btn btn-info' value='Case 2a (Failure Replicating to Node 2 from Central Node)' />
+							<br />
+							<br />
+							<input id='insert-btn-2b' type='submit' class='btn btn-info' value='Case 2b (Failure Replicating to Node 3 from Central Node)' />
+							<br />
+							<br />
+							<input id='insert-btn-3' type='submit' class='btn btn-info' value='Case 3 (Central Node Unavailable)' />
+							<br />
+							<br />
+							<input id='insert-btn-4a' type='submit' class='btn btn-info' value='Case 4a (Node 2 Unavailable)' />
+							<br />
+							<br />
+							<input id='insert-btn-4b' type='submit' class='btn btn-info' value='Case 4b (Node 3 Unavailable)' />
+						</form>
+					</div>
+				</div>
+
+				<div class='col-sm-5 form-group methods'>
+					<div class='form-group'>
+						<h3>
+							Update
+							{{! <span style='font-size: 14px; margin-left: 10px;'>
+								Blank fields will retain old values
+							</span> }}
+						</h3>
+
+						<form id='failure-update-form' method='post' action='/updateEntry'>
+							<div class='container-fluid' style='padding: 0px;'>
+								<div class='row' style='padding: 0px;'>
+									<div class='col-sm-6'>
+										<label for='id'>
+											ID
+										</label>
+
+										<input type='number' class='form-control' id='id' name='id' placeholder='Basis for selecting entry' required />
+										<br />
+
+										<label for='id'>
+											Title
+										</label>
+
+										<input type='text' class='form-control' id='title' name='title' placeholder='Title of the movie' required />
+										<br />
+
+										<label for='genre'>
+											Genre
+										</label>
+
+										<input type='text' class='form-control' id='genre' name='genre' placeholder='Comedy, drama, etc.' required />
+										<br>
+										<label for='rank'>
+											Rank
+										</label>
+
+										<input type='number' class='form-control' id='rank' name='rank' step='0.01' min='0' max='10' placeholder='Movie rating' required />
+									
+									</div>
+
+									<div class='col-sm-6'>
+										<label for='director'>
+											Director
+										</label>
+
+										<input type='text' class='form-control' id='director' name='director' placeholder='Lead director' required />
+										<br />
+
+										<label for='actor1'>
+											Actor 1
+										</label>
+
+										<input type='text' class='form-control' id='actor1' name='actor1' placeholder='Lead actor' required />
+										<br />
+
+										<label for='actor2'>
+											Actor 2
+										</label>
+
+										<input type='text' class='form-control' id='actor2' name='actor2' placeholder='Supporting actor' required />
+									</div>
+								</div>
+							</div>
+							<input id='hidden-isolation-level' name='hiddenIsolationLevel' type='hidden' />
+							<input id='update-btn-1' type='submit' class='btn btn-info' value='Case 1 (Failure While Replicating to Central Node from Node 2 or Node 3)' />
+							<br />
+							<br />
+							<input id='update-btn-2a' type='submit' class='btn btn-info' value='Case 2a (Failure While Replicating to Node 2 from Central Node)' />
+							<br />
+							<br />
+							<input id='update-btn-2b' type='submit' class='btn btn-info' value='Case 2b (Failure While Replicating to Node 3 from Central Node)' />
+							<br />
+							<br />
+							<input id='update-btn-3' type='submit' class='btn btn-info' value='Case 3 (Central Node Unavailable)' />
+							<br />
+							<br />
+							<input id='update-btn-4a' type='submit' class='btn btn-info' value='Case 4a (Node 2 Unavailable)' />
+							<br />
+							<br />
+							<input id='update-btn-4b' type='submit' class='btn btn-info' value='Case 4b (Node 3 Unavailable)' />
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>

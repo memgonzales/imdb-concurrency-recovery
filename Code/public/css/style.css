@@ -1,0 +1,117 @@
+html,
+body {
+	margin: 0px;
+	padding: 0px;
+	font-family: 'Open Sans', Arial, sans-serif;
+}
+
+div {
+	padding: 20px;
+}
+
+.flex-container {
+	display: flex;
+	justify-content: space-around;
+}
+
+.shaded {
+	background-color: rgb(236, 233, 233);
+}
+
+input[type='submit'] {
+	width: 100%;
+	background-color: rgb(14 70 65);
+	border: 0px;
+	outline: none !important;
+	box-shadow: none !important;
+}
+
+input[type='submit']:hover {
+	width: 100%;
+	background-color: rgb(3, 34, 31) !important;
+}
+
+#header {
+	width: 85%;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.results-div {
+	padding-top: 0px;
+}
+
+.methods {
+	padding-left: 40px !important;
+	padding-right: 40px !important;
+}
+
+.row {
+	padding-top: 0px;
+	padding-bottom: 0px;
+}
+
+.form-group {
+	padding: 0px;
+}
+
+.report-title {
+	margin: auto;
+	font-size: 20px;
+	font-weight: bold;
+}
+
+#display-all {
+	background-color: rgb(236, 233, 233);
+	color: #333;
+	outline: none !important;
+	box-shadow: none !important;
+	margin-top: 7px;
+}
+
+#display-all:hover {
+	background-color: rgb(236, 233, 233) !important;
+	text-decoration: underline;
+}
+
+#delete-btn,
+#delete-case1,
+#delete-case2a,
+#delete-case2b,
+#delete-case3,
+#delete-case4a,
+#delete-case4b {
+	background-color: rgb(206, 79, 79) !important;
+}
+
+#delete-btn:hover,
+#delete-case1:hover,
+#delete-case2a:hover,
+#delete-case2b:hover,
+#delete-case3:hover,
+#delete-case4a:hover,
+#delete-case4b:hover {
+	background-color: rgb(185, 52, 52) !important;
+}
+
+#demo-btn-div {
+	padding-bottom: 0px;
+}
+
+#demo-btn {
+	width: 100%;
+	background-color: #2758cace;
+	border: 0px;
+	outline: none !important;
+	box-shadow: none !important;
+}
+
+#demo-btn:hover {
+	width: 100%;
+	background-color: #092d81c7;
+	border: 0px;
+}
+
+.results-table tr:hover td {
+	background-color: rgb(236, 233, 233);
+}
